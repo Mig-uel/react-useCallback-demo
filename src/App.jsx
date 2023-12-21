@@ -1,17 +1,21 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { shuffle } from './utils'
 
 import Search from './components/search.component'
 
-const allUsers = ['kohn', 'alex', 'george', 'simon', 'james']
+const allUsers = ['john', 'alex', 'george', 'simon', 'james']
 
 function App() {
   const [users, setUsers] = useState(allUsers)
 
-  const handleSearch = (text) => {
-    const filteredUsers = allUsers.filter((user) => user.includes(text))
-    setUsers(filteredUsers)
-  }
+  const handleSearchCallback = useCallback(
+    (text) => {
+      console.log(users[0])
+      const filteredUsers = allUsers.filter((user) => user.includes(text))
+      setUsers(filteredUsers)
+    },
+    [users]
+  )
 
   const handleClick = () => setUsers(shuffle(allUsers))
 
@@ -20,7 +24,7 @@ function App() {
       <div>
         <button onClick={handleClick}>Shuffle</button>
 
-        <Search onChange={handleSearch} />
+        <Search onChange={handleSearchCallback} />
       </div>
 
       <ul>
@@ -33,3 +37,5 @@ function App() {
 }
 
 export default App
+
+// never freeze functions for ever, only when you have to
